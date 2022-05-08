@@ -1,0 +1,10 @@
+C:\Users\Win10m\source\repos\SFT\SuperFileTransferClient\SuperFileTransferClient\bin\Debug\SuperFileTransferClient.exe.config
+C:\Users\Win10m\source\repos\SFT\SuperFileTransferClient\SuperFileTransferClient\bin\Debug\SuperFileTransferClient.exe
+C:\Users\Win10m\source\repos\SFT\SuperFileTransferClient\SuperFileTransferClient\bin\Debug\SuperFileTransferClient.pdb
+C:\Users\Win10m\source\repos\SFT\SuperFileTransferClient\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.csproj.AssemblyReference.cache
+C:\Users\Win10m\source\repos\SFT\SuperFileTransferClient\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.MainForm.resources
+C:\Users\Win10m\source\repos\SFT\SuperFileTransferClient\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.Properties.Resources.resources
+C:\Users\Win10m\source\repos\SFT\SuperFileTransferClient\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.csproj.GenerateResource.cache
+C:\Users\Win10m\source\repos\SFT\SuperFileTransferClient\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.csproj.CoreCompileInputs.cache
+C:\Users\Win10m\source\repos\SFT\SuperFileTransferClient\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.exe
+C:\Users\Win10m\source\repos\SFT\SuperFileTransferClient\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.pdb
