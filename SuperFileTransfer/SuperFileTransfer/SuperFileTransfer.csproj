@@ -50,5 +50,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FIleTransferCommon\FIleTransferCommon.csproj">
+      <Project>{0c66e10b-0497-4c34-97a6-a5ffc33b680d}</Project>
+      <Name>FIleTransferCommon</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

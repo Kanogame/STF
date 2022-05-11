@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FIleTransferCommon;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,25 +21,31 @@ namespace SuperFileTransferClient
         TcpClient retriever;
         NetworkStream senderStream;
         NetworkStream retrieverStream;
+        Guid thisClientId;
 
         public MainForm()
         {
             InitializeComponent();
+            thisClientId = Guid.NewGuid();
         }
 
         private void button1_Click(object senderIGNORE, EventArgs e)
         {
+            byte[] guid = thisClientId.ToByteArray();
             StartListener();
 
             string server = "localhost";
             sender = new TcpClient();
             sender.Connect(server, 13531);
             senderStream = sender.GetStream();
+            //server
+            senderStream.write(guid);
             senderStream.WriteByte(1);
 
             retriever = new TcpClient();
             retriever.Connect(server, 13531);
             retrieverStream = retriever.GetStream();
+            //client
             retrieverStream.WriteByte(0);
             var t = new Thread(ProcessRequest);
             t.Start();
@@ -68,7 +75,11 @@ namespace SuperFileTransferClient
         private void processTransfer(object o)
         {
              var ns = (NetworkStream)o;
-            var command = (TransferCommand)ns.ReadByte();
+            var command = (TransferCommands)ns.ReadByte();
+            if (command == TransferCommands.Ping)
+            {
+                 ns.WriteByte((byte)TransferCommands.Ping);
+            }
         }
 
         private void ProcessRequest()

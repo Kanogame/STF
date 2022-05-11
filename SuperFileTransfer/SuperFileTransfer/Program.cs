@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FIleTransferCommon;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,7 +13,7 @@ namespace SuperFileTransfer
     class Program
     {
 
-        List<computer> computers;
+        Dictionary<string, computer> computers;
 
         static void Main(string[] args)
         {
@@ -23,7 +24,7 @@ namespace SuperFileTransfer
 
         Program()
         {
-            computers = new List<computer>();
+            computers = new Dictionary<string, computer>();
         }
 
         void main()
@@ -49,6 +50,8 @@ namespace SuperFileTransfer
         void addClient(TcpClient client)
         {
             var ns = client.GetStream();
+            var clientGuidBytes = ns.read(16);
+            var clientGuid = new Guid(clientGuidBytes);
             bool requestsToServer = ns.ReadByte() == 1;
             Console.WriteLine(client.Client.RemoteEndPoint.ToString());
             if (requestsToServer)
@@ -59,6 +62,35 @@ namespace SuperFileTransfer
             {
                 Console.WriteLine("Запросы к клиенту");
             }
+            addChannel(clientGuid, client, requestsToServer);
+        }
+
+        void addChannel(Guid clientGuid, TcpClient client, bool requestsToServer)
+        {
+            var clientEndPoint = client.Client.RemoteEndPoint;
+            string clientId = $"{clientGuid}:{clientEndPoint}";
+            computer comp;
+            if (computers.ContainsKey(clientId))
+            {
+                comp = computers[clientId];
+            }
+            else
+            {
+                 comp = new computer(clientId);
+            }
+            if (requestsToServer)
+            {
+                comp.SetChannelToClient(client);
+            }
+            else
+            {
+                 comp.SetChannelToClient(client);
+            }
+            if (comp.BothChannelIsExist())
+            {
+                comp.CheckTransferPort();
+            }
+            computers.Add(clientId, comp);
         }
 
         void SignalToClients()
