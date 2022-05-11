@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFileTransfer", "SuperFileTransfer\SuperFileTransfer.csproj", "{513BFC5D-0299-42DC-848F-37C4A24CAC69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFileTransferClient", "SuperFileTransferClient\SuperFileTransferClient.csproj", "{02589246-9B98-4305-9968-9FADBFEE40E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FIleTransferCommon", "FIleTransferCommon\FIleTransferCommon.csproj", "{0C66E10B-0497-4C34-97A6-A5FFC33B680D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{513BFC5D-0299-42DC-848F-37C4A24CAC69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{513BFC5D-0299-42DC-848F-37C4A24CAC69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{513BFC5D-0299-42DC-848F-37C4A24CAC69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02589246-9B98-4305-9968-9FADBFEE40E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02589246-9B98-4305-9968-9FADBFEE40E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02589246-9B98-4305-9968-9FADBFEE40E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02589246-9B98-4305-9968-9FADBFEE40E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C66E10B-0497-4C34-97A6-A5FFC33B680D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C66E10B-0497-4C34-97A6-A5FFC33B680D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C66E10B-0497-4C34-97A6-A5FFC33B680D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C66E10B-0497-4C34-97A6-A5FFC33B680D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
