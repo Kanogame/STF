@@ -22,17 +22,22 @@ namespace SuperFileTransferClient
         NetworkStream senderStream;
         NetworkStream retrieverStream;
         Guid thisClientId;
+        List<computer> computers;
+        Random rnd = new Random();
+        string lblguid;
 
         public MainForm()
         {
             InitializeComponent();
             thisClientId = Guid.NewGuid();
+            lblguid = $"guid: {thisClientId}";
         }
 
         private void button1_Click(object senderIGNORE, EventArgs e)
         {
             byte[] guid = thisClientId.ToByteArray();
-            StartListener();
+            label1.Text = lblguid;
+            int port = StartListener();
 
             string server = "localhost";
             sender = new TcpClient();
@@ -46,18 +51,37 @@ namespace SuperFileTransferClient
             retriever.Connect(server, 13531);
             retrieverStream = retriever.GetStream();
             //client
+            retrieverStream.write(guid);
             retrieverStream.WriteByte(0);
             var t = new Thread(ProcessRequest);
+            t.IsBackground = true;
             t.Start();
         }
 
 
-        private void StartListener()
+        private int StartListener()
         {
-            var listener = new TcpListener(IPAddress.Any, 13531);
-            listener.Start();
+            TcpListener listener;
+            int port;
+            while (true)
+            {
+                port = rnd.Next(1, 65565);
+                try
+                {
+                    listener = new TcpListener(IPAddress.Any, port);
+                    listener.Start();
+
+                    break;
+                }
+                catch (Exception)
+                {
+                     
+                }
+            }
             var t = new Thread(transferFiles);
-            t.Start();
+            t.IsBackground = true;
+            t.Start(listener);
+            return port;
         }
 
         private void transferFiles(object o)
@@ -68,6 +92,7 @@ namespace SuperFileTransferClient
                 var client = listener.AcceptTcpClient();
                 var ns = client.GetStream();
                 var t = new Thread(processTransfer);
+                t.IsBackground = true;
                 t.Start();
             }
         }
@@ -84,7 +109,7 @@ namespace SuperFileTransferClient
 
         private void ProcessRequest()
         {
-            while (true)
+            //while (true)
             {
 
             }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFileTransfer", "SuperFileTransfer\SuperFileTransfer.csproj", "{513BFC5D-0299-42DC-848F-37C4A24CAC69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFileTransferServer", "SuperFileTransfer\SuperFileTransferServer.csproj", "{513BFC5D-0299-42DC-848F-37C4A24CAC69}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperFileTransferClient", "SuperFileTransferClient\SuperFileTransferClient.csproj", "{02589246-9B98-4305-9968-9FADBFEE40E2}"
 EndProject

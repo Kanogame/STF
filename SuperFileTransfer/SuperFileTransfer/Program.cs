@@ -67,8 +67,9 @@ namespace SuperFileTransfer
 
         void addChannel(Guid clientGuid, TcpClient client, bool requestsToServer)
         {
-            var clientEndPoint = client.Client.RemoteEndPoint;
-            string clientId = $"{clientGuid}:{clientEndPoint}";
+            var clientEndPoint = (IPEndPoint)client.Client.RemoteEndPoint;
+            string clientId = $"{clientGuid}:{clientEndPoint.Address}";
+            Console.WriteLine(clientId);
             computer comp;
             if (computers.ContainsKey(clientId))
             {
@@ -76,7 +77,8 @@ namespace SuperFileTransfer
             }
             else
             {
-                 comp = new computer(clientId);
+                 comp = new computer(clientGuid);
+                 computers.Add(clientId, comp);
             }
             if (requestsToServer)
             {
@@ -90,7 +92,6 @@ namespace SuperFileTransfer
             {
                 comp.CheckTransferPort();
             }
-            computers.Add(clientId, comp);
         }
 
         void SignalToClients()
