@@ -12,13 +12,16 @@ namespace SuperFileTransfer
     public class computer
     {
         Guid guid;
+        string clientId;
         TcpClient toServer;
         TcpClient toClient;
         bool TransferPortWorks;
+        int portForFileTransfer;
 
-        public computer(Guid guid)
+        public computer(Guid guid, String clientId)
         {
             this.guid = guid;
+            this.clientId = clientId;
         }
 
         public void SetChannelToServer(TcpClient chan)
@@ -29,6 +32,11 @@ namespace SuperFileTransfer
         public void SetChannelToClient(TcpClient chan)
         {
             this.toClient = chan;
+        }
+
+        public void SetPortForFileTranfer(int port)
+        {
+            this.portForFileTransfer = port;
         }
 
         public bool BothChannelIsExist()
@@ -42,7 +50,7 @@ namespace SuperFileTransfer
             var ep = (IPEndPoint)toServer.Client.RemoteEndPoint;
             try
             {
-                cli.Connect(ep.Address, 13532);
+                cli.Connect(ep.Address, portForFileTransfer);
                 var ns = cli.GetStream();
                 ns.WriteByte((byte)TransferCommands.Ping);
                 Guid retrieverGuid = new Guid(ns.read(16));
@@ -59,6 +67,15 @@ namespace SuperFileTransfer
             {
                  TransferPortWorks = false;
             }
+        }
+
+        public NetworkStream getStreamToClient()
+        {
+            if (toClient == null)
+            {
+                return null;
+            }
+            return toClient.GetStream();
         }
     }
 }

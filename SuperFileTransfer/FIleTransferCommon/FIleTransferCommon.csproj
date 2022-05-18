@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandToClient.cs" />
+    <Compile Include="ProduserConsumerQueue.cs" />
     <Compile Include="rio.cs" />
     <Compile Include="ServerCommands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

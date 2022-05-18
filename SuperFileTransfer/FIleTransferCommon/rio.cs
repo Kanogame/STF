@@ -20,10 +20,24 @@ namespace FIleTransferCommon
              stream.Write(byteArray, 0, byteArray.Length);
         }
 
-        public static int readInt(this NetworkStream stream, int val)
+        public static int readInt(this NetworkStream stream)
         {
              byte[] byteArray = stream.read(4);
              return BitConverter.ToInt32(byteArray, 0);
+        }
+
+        public static void writeString(this NetworkStream stream, string val)
+        {
+            byte[] bytes = UTF8Encoding.UTF8.GetBytes(val);
+            stream.writeInt(bytes.Length);
+            stream.write(bytes);
+        }
+
+        public static string readString(this NetworkStream stream)
+        {
+            int len = stream.readInt();
+            var bytes = stream.read(len);
+            return UTF8Encoding.UTF8.GetString(bytes);
         }
 
         public static byte[] read(this NetworkStream stream, int bytesCount, Action<int> progress = null)

@@ -15,7 +15,7 @@ namespace SuperFileTransferClient
             
         public computer(Guid giud, IPEndPoint endPoint, bool hasAccess)
         {
-            this.guid = guid;
+            this.guid = giud;
             this.endPoint = endPoint;
             this.hasAccess = hasAccess;
         }

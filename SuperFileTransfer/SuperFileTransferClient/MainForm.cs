@@ -29,6 +29,7 @@ namespace SuperFileTransferClient
         public MainForm()
         {
             InitializeComponent();
+            computers = new List<computer>();
             thisClientId = Guid.NewGuid();
             lblguid = $"guid: {thisClientId}";
         }
@@ -39,6 +40,7 @@ namespace SuperFileTransferClient
             label1.Text = lblguid;
             int port = StartListener();
 
+
             string server = "localhost";
             sender = new TcpClient();
             sender.Connect(server, 13531);
@@ -46,6 +48,8 @@ namespace SuperFileTransferClient
             //server
             senderStream.write(guid);
             senderStream.WriteByte(1);
+            senderStream.writeInt(port);
+
 
             retriever = new TcpClient();
             retriever.Connect(server, 13531);
@@ -109,10 +113,31 @@ namespace SuperFileTransferClient
 
         private void ProcessRequest()
         {
-            //while (true)
+            while (true)
             {
-
+                var cmd = (CommandToClient)retrieverStream.ReadByte();
+                if (cmd == CommandToClient.AddComputer)
+                {
+                    var guidBytes = retrieverStream.read(16);
+                    var guid = new Guid(guidBytes);
+                    var addrLen = retrieverStream.readInt();
+                    var addrBytes = retrieverStream.read(addrLen);
+                    var addr = new IPAddress(addrBytes);
+                    var port = retrieverStream.readInt();
+                    var hasAddress = retrieverStream.ReadByte() == 1;
+                    var c = new computer(guid, new IPEndPoint(addr, port), hasAddress);
+                    computers.Add(c);
+                    this.Invoke(new Action(() =>
+                    {
+                        refreshComputersList();
+                    }));
+                }
             }
+        }
+
+        private void refreshComputersList()
+        {
+            throw new NotImplementedException();
         }
     }
 }

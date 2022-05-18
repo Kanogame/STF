@@ -14,6 +14,7 @@ namespace SuperFileTransfer
     {
 
         Dictionary<string, computer> computers;
+        ProducerConsumerQueue<TaskToClient> queueToClient;
 
         static void Main(string[] args)
         {
@@ -25,12 +26,23 @@ namespace SuperFileTransfer
         Program()
         {
             computers = new Dictionary<string, computer>();
+            queueToClient = new ProducerConsumerQueue<TaskToClient>(processTaskToClient);
+        }
+
+        void processTaskToClient(TaskToClient Task)
+        {
+            //invoke in other thread
+            if (Task is TaskAddComputer)
+            {
+                var t = (TaskAddComputer)Task;
+                var ns = t.SendTo.getStreamToClient();
+                ns.WriteByte((byte)CommandToClient.AddComputer);
+            }
         }
 
         void main()
         {
             var acceptClientThreads = new Thread(AcceptClients);
-            var signalsToClientsThread = new Thread(SignalToClients);
             acceptClientThreads.IsBackground = true;
             acceptClientThreads.Start();
             Console.ReadKey();
@@ -71,32 +83,49 @@ namespace SuperFileTransfer
             string clientId = $"{clientGuid}:{clientEndPoint.Address}";
             Console.WriteLine(clientId);
             computer comp;
-            if (computers.ContainsKey(clientId))
+            lock (computers)
             {
-                comp = computers[clientId];
-            }
-            else
-            {
-                 comp = new computer(clientGuid);
-                 computers.Add(clientId, comp);
-            }
-            if (requestsToServer)
-            {
-                comp.SetChannelToClient(client);
-            }
-            else
-            {
-                 comp.SetChannelToClient(client);
-            }
-            if (comp.BothChannelIsExist())
-            {
-                comp.CheckTransferPort();
+                if (computers.ContainsKey(clientId))
+                {
+                    comp = computers[clientId];
+                }
+                else
+                {
+                     comp = new computer(clientGuid, clientId);
+                     computers.Add(clientId, comp);
+                }
+                if (requestsToServer)
+                {
+                    comp.SetChannelToClient(client);
+                    int port = client.GetStream().readInt();
+                    comp.SetPortForFileTranfer(port);
+                }
+                else
+                {
+                     comp.SetChannelToClient(client);
+                }
+                if (comp.BothChannelIsExist())
+                {
+                    comp.CheckTransferPort();
+                    notifyConputerAdded(comp);
+                }
             }
         }
 
-        void SignalToClients()
+        void notifyConputerAdded(computer comp)
         {
-
+            foreach (var current in computers)
+            {
+                 if (current.Value == comp)
+                 {
+                     continue;
+                 }
+                 if (current.Value.BothChannelIsExist())
+                 {
+                     var t = new TaskAddComputer(current.Value, comp);
+                     queueToClient.EnqueueTask(t);
+                 }
+            }
         }
     }
 }
