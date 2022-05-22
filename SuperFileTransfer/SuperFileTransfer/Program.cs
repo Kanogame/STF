@@ -37,6 +37,12 @@ namespace SuperFileTransfer
                 var t = (TaskAddComputer)Task;
                 var ns = t.SendTo.getStreamToClient();
                 ns.WriteByte((byte)CommandToClient.AddComputer);
+                var who = t.whoAdded;
+                ns.writeGuid(who.getGuid());
+                ns.writeIPAddress(who.getIPAddress());
+                ns.writeInt(who.GetPortForFileTransfer());
+                ns.writeBool(who.getHasAccess());
+                
             }
         }
 
@@ -96,7 +102,7 @@ namespace SuperFileTransfer
                 }
                 if (requestsToServer)
                 {
-                    comp.SetChannelToClient(client);
+                    comp.SetChannelToServer(client);
                     int port = client.GetStream().readInt();
                     comp.SetPortForFileTranfer(port);
                 }

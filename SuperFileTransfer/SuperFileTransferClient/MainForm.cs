@@ -23,14 +23,16 @@ namespace SuperFileTransferClient
         NetworkStream retrieverStream;
         Guid thisClientId;
         List<computer> computers;
-        Random rnd = new Random();
-        string lblguid;
-
-        public MainForm()
-        {
-            InitializeComponent();
-            computers = new List<computer>();
-            thisClientId = Guid.NewGuid();
+        List<ComputerControl> computerControl;                          
+        Random rnd = new Random();                                      
+        string lblguid;                                                 
+                                                                        
+        public MainForm()                                               
+        {                                                               
+            InitializeComponent();                                      
+            computers = new List<computer>();                           
+            computerControl = new List<ComputerControl>();              
+            thisClientId = Guid.NewGuid();                              
             lblguid = $"guid: {thisClientId}";
         }
 
@@ -41,7 +43,7 @@ namespace SuperFileTransferClient
             int port = StartListener();
 
 
-            string server = "localhost";
+            string server = "192.168.1.36";
             sender = new TcpClient();
             sender.Connect(server, 13531);
             senderStream = sender.GetStream();
@@ -97,7 +99,7 @@ namespace SuperFileTransferClient
                 var ns = client.GetStream();
                 var t = new Thread(processTransfer);
                 t.IsBackground = true;
-                t.Start();
+                t.Start(ns);
             }
         }
 
@@ -107,7 +109,7 @@ namespace SuperFileTransferClient
             var command = (TransferCommands)ns.ReadByte();
             if (command == TransferCommands.Ping)
             {
-                 ns.WriteByte((byte)TransferCommands.Ping);
+                 ns.write(thisClientId.ToByteArray());
             }
         }
 
@@ -118,26 +120,55 @@ namespace SuperFileTransferClient
                 var cmd = (CommandToClient)retrieverStream.ReadByte();
                 if (cmd == CommandToClient.AddComputer)
                 {
-                    var guidBytes = retrieverStream.read(16);
-                    var guid = new Guid(guidBytes);
-                    var addrLen = retrieverStream.readInt();
-                    var addrBytes = retrieverStream.read(addrLen);
-                    var addr = new IPAddress(addrBytes);
+                    var guid = retrieverStream.readGuid();
+                    var addr = retrieverStream.readIpAddress();
                     var port = retrieverStream.readInt();
-                    var hasAddress = retrieverStream.ReadByte() == 1;
+                    var hasAddress = retrieverStream.readBool();
                     var c = new computer(guid, new IPEndPoint(addr, port), hasAddress);
                     computers.Add(c);
                     this.Invoke(new Action(() =>
                     {
-                        refreshComputersList();
+                       addComputerControl(c);
                     }));
                 }
             }
         }
 
-        private void refreshComputersList()
+        private void addComputerControl(computer c)
         {
-            throw new NotImplementedException();
+            var ctrl = new ComputerControl(c);
+            panel.Controls.Add(ctrl);
+            computerControl.Add(ctrl);
+            setComputerControlsLocation();
+        }
+
+        private void setComputerControlsLocation()
+        {
+            if (computerControl.Count <= 0)
+            {
+                return;
+            }
+            var cc = computerControl[0];
+            var cw = cc.Width;
+            var ch = cc.Height;
+            int gap = 10;
+            var cs = panel.ClientSize;
+            var w = cs.Width;
+            var h = cs.Height;
+            var n = (w - gap) / (cw + gap);
+            for (int i = 0; i < computerControl.Count; i++)
+            {
+                int rowIndex = i / n;
+                int colIndex = i % n;
+                var current = computerControl[i];
+                current.Left = gap + colIndex * (cw + gap);
+                current.Top = gap + rowIndex* (ch + gap);
+            }
+        }
+
+        private void MainForm_SizeChanged(object sender, EventArgs e)
+        {
+            setComputerControlsLocation();
         }
     }
 }

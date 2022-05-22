@@ -18,6 +18,26 @@ namespace SuperFileTransfer
         bool TransferPortWorks;
         int portForFileTransfer;
 
+        public int GetPortForFileTransfer()
+        {
+            return portForFileTransfer;
+        }
+        
+        public bool getHasAccess()
+        {
+            return TransferPortWorks;
+        }
+        
+        public Guid getGuid()
+        {
+            return guid;
+        }
+
+        public IPAddress getIPAddress()
+        {
+            return (toClient.Client.RemoteEndPoint as IPEndPoint)?.Address;
+        }
+
         public computer(Guid guid, String clientId)
         {
             this.guid = guid;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,40 @@ namespace FIleTransferCommon
 {
     public static class rio
     {
+        public static void writeGuid(this NetworkStream stream, Guid guid)
+        {
+            stream.write(guid.ToByteArray());
+        }
+
+        public static Guid readGuid(this NetworkStream stream)
+        {
+            return new Guid(stream.read(16));
+        }
+
+        public static void writeIPAddress(this NetworkStream stream, IPAddress iPAddress)
+        {
+            var bytes = iPAddress.GetAddressBytes();
+            stream.writeInt(bytes.Length);
+            stream.write(bytes);
+        }
+
+        public static IPAddress readIpAddress(this NetworkStream stream)
+        {
+            var addrLen = stream.readInt();
+            var addrBytes = stream.read(addrLen);
+            return new IPAddress(addrBytes);
+        }
+
+        public static void writeBool(this NetworkStream stream, bool val)
+        {
+            stream.WriteByte(val ? (byte)1 : (byte)0);
+        }
+
+        public static bool readBool(this NetworkStream stream)
+        {
+            return stream.ReadByte() == 1;
+        }
+
         public static void write(this NetworkStream stream, byte[] bytes)
         {
              stream.Write(bytes, 0, bytes.Length);

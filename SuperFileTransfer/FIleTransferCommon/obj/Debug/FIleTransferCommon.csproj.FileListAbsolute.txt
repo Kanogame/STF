@@ -3,4 +3,3 @@ C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\FIleTransferCommon\bin\Debug\
 C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.csproj.CoreCompileInputs.cache
 C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.dll
 C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.pdb
-C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.csproj.AssemblyReference.cache

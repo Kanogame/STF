@@ -13,7 +13,8 @@ namespace SuperFileTransfer
 
         public TaskAddComputer(computer SendTo, computer whoAdded)
         {
-
+            this.SendTo = SendTo;
+            this.whoAdded = whoAdded;
         }
     }
 }

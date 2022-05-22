@@ -18,8 +18,9 @@ namespace FIleTransferCommon
  
       public ProducerConsumerQueue(Action<T> processTask) 
       {
-            this.processTask = processTask;
+        this.processTask = processTask;
         worker = new Thread(Work);
+        worker.IsBackground = true;
         worker.Start();
       }
  

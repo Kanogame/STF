@@ -21,3 +21,4 @@ C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\SuperFileTransferClient\obj\D
 C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.csproj.CopyComplete
 C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.exe
 C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.pdb
+C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\SuperFileTransferClient\obj\Debug\SuperFileTransferClient.ComputerControl.resources
