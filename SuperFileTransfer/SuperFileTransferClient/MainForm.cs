@@ -33,17 +33,39 @@ namespace SuperFileTransferClient
             computers = new List<computer>();                           
             computerControl = new List<ComputerControl>();              
             thisClientId = Guid.NewGuid();                              
-            lblguid = $"guid: {thisClientId}";
+            lblguid += $"guid: {thisClientId}";
+        }
+
+        private string getLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("no network adapter");
         }
 
         private void button1_Click(object senderIGNORE, EventArgs e)
         {
+            button1.Enabled = false;
+            button1.Visible = false;
             byte[] guid = thisClientId.ToByteArray();
             label1.Text = lblguid;
             int port = StartListener();
 
+            label3.Visible = true;
+            string IPAddr = getLocalIPAddress();
+            label3.Text += IPAddr;
 
-            string server = "192.168.1.36";
+            label4.Visible = true;
+            label4.Text += port;
+
+
+            string server = textBox1.Text;
             sender = new TcpClient();
             sender.Connect(server, 13531);
             senderStream = sender.GetStream();
@@ -81,7 +103,7 @@ namespace SuperFileTransferClient
                 }
                 catch (Exception)
                 {
-                     
+                     //ignore
                 }
             }
             var t = new Thread(transferFiles);
@@ -115,22 +137,57 @@ namespace SuperFileTransferClient
 
         private void ProcessRequest()
         {
-            while (true)
+            try
             {
-                var cmd = (CommandToClient)retrieverStream.ReadByte();
-                if (cmd == CommandToClient.AddComputer)
+                while (true)
                 {
-                    var guid = retrieverStream.readGuid();
-                    var addr = retrieverStream.readIpAddress();
-                    var port = retrieverStream.readInt();
-                    var hasAddress = retrieverStream.readBool();
-                    var c = new computer(guid, new IPEndPoint(addr, port), hasAddress);
-                    computers.Add(c);
-                    this.Invoke(new Action(() =>
+                    var cmd = (CommandToClient)retrieverStream.ReadByte();
+                    if (cmd == CommandToClient.AddComputer)
                     {
-                       addComputerControl(c);
-                    }));
+                        var guid = retrieverStream.readGuid();
+                        var addr = retrieverStream.readIpAddress();
+                        var port = retrieverStream.readInt();
+                        var hasAddress = retrieverStream.readBool();
+                        var c = new computer(guid, new IPEndPoint(addr, port), hasAddress);
+                        computers.Add(c);
+                        this.Invoke(new Action(() =>
+                        {
+                           addComputerControl(c);
+                        }));
+                    }
+                    else if (cmd == CommandToClient.RemoveComputer)
+                    {
+                        var guid = retrieverStream.readGuid();
+                        var ind = - 1;
+                        for (int i = 0; i < computers.Count; i++)
+                        {
+                            if (computers[i].guid == guid)
+                            {
+                                ind = i;
+                                break;
+                            }
+                        }
+                        if (ind > -1)
+                        {
+                            computers.RemoveAt(ind);
+                            this.Invoke(new Action(() =>
+                            {
+                                removeComputerControl(ind);
+                            }));
+                        }
+                        computers = computers.Where(x => x.guid != guid).ToList();
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("вы не нравитесь серваку, он ушел");
+                this.Invoke(new Action(() => {button1.Visible = true; } ));
+                this.Invoke(new Action(() => {button1.Enabled = true; } ));
+                this.Invoke(new Action(() => {label3.Visible = false; } ));
+                this.Invoke(new Action(() => {label4.Visible = false; } ));
+                this.Invoke(new Action(() => {computerControl.Clear(); } ));
+                this.Invoke(new Action(() => {panel.Controls.Clear(); } ));
             }
         }
 
@@ -139,6 +196,15 @@ namespace SuperFileTransferClient
             var ctrl = new ComputerControl(c);
             panel.Controls.Add(ctrl);
             computerControl.Add(ctrl);
+            setComputerControlsLocation();
+        }
+
+        private void removeComputerControl(int ind)
+        {
+            var ctrl = computerControl[ind];
+            computerControl.RemoveAt(ind);
+            panel.Controls.RemoveAt(ind);
+            ctrl.Dispose();
             setComputerControlsLocation();
         }
 

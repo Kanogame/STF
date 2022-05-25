@@ -35,14 +35,55 @@ namespace SuperFileTransfer
             if (Task is TaskAddComputer)
             {
                 var t = (TaskAddComputer)Task;
-                var ns = t.SendTo.getStreamToClient();
-                ns.WriteByte((byte)CommandToClient.AddComputer);
-                var who = t.whoAdded;
-                ns.writeGuid(who.getGuid());
-                ns.writeIPAddress(who.getIPAddress());
-                ns.writeInt(who.GetPortForFileTransfer());
-                ns.writeBool(who.getHasAccess());
+                try
+                {
+                    var ns = t.SendTo.getStreamToClient();
+                    ns.WriteByte((byte)CommandToClient.AddComputer);
+                    var who = t.whoAdded;
+                    ns.writeGuid(who.getGuid());
+                    ns.writeIPAddress(who.getIPAddress());
+                    ns.writeInt(who.GetPortForFileTransfer());
+                    ns.writeBool(who.getHasAccess());
+                }
+                catch (Exception)
+                {
+                    lock (computers)
+                    {
+                        var clientId = t.SendTo.getClientId();
+                        computers.Remove(clientId);
+                        foreach (var comp in computers)
+                        {
+                            var remTask = new TaskRemoveComputer(comp.Value, t.SendTo.getGuid());
+                            queueToClient.EnqueueTask(remTask);
+                        }
+                    }
+                }
                 
+            }
+            else if (Task is TaskRemoveComputer)
+            {
+                /*
+                lock (computers)
+                {
+                    if (computers.ContainsKey(t.SendTo.getClientId()));
+                    {
+                        return;
+                    }
+                }
+                    */
+                try
+                {
+                    var t = (TaskRemoveComputer)Task;
+                    var ns = t.SendTo.getStreamToClient();
+                    ns.WriteByte((byte)CommandToClient.RemoveComputer);
+                    Console.WriteLine("Send removeComputer");
+                    var who = t.whoRemoved;
+                    ns.writeGuid(who);
+                }
+                catch (Exception)
+                {
+                    //ignore
+                }
             }
         }
 
@@ -130,6 +171,8 @@ namespace SuperFileTransfer
                  {
                      var t = new TaskAddComputer(current.Value, comp);
                      queueToClient.EnqueueTask(t);
+                    var t2 = new TaskAddComputer(comp, current.Value);
+                    queueToClient.EnqueueTask(t2);
                  }
             }
         }

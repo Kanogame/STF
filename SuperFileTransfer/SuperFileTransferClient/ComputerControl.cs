@@ -22,7 +22,23 @@ namespace SuperFileTransferClient
             var ipEndPoint = Computer.endPoint;
             lblAddr.Text = ipEndPoint.Address.ToString();
             lblPort.Text = ipEndPoint.Port.ToString();
+            lblPort.BackColor = Computer.hasAccess ? Color.Green : Color.Red;
             
+        }
+
+        private void ComputerControl_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] fileList = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            for (int i = 0; i < fileList.Length; i++)
+            {
+                var path = fileList[i];
+                MessageBox.Show(path);
+            }
+        }
+
+        private void ComputerControl_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Copy;
         }
     }
 }

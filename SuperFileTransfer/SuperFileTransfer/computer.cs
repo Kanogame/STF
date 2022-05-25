@@ -18,6 +18,17 @@ namespace SuperFileTransfer
         bool TransferPortWorks;
         int portForFileTransfer;
 
+        public computer(Guid guid, String clientId)
+        {
+            this.guid = guid;
+            this.clientId = clientId;
+        }
+
+        public string getClientId()
+        {
+            return clientId;
+        }
+
         public int GetPortForFileTransfer()
         {
             return portForFileTransfer;
@@ -38,11 +49,6 @@ namespace SuperFileTransfer
             return (toClient.Client.RemoteEndPoint as IPEndPoint)?.Address;
         }
 
-        public computer(Guid guid, String clientId)
-        {
-            this.guid = guid;
-            this.clientId = clientId;
-        }
 
         public void SetChannelToServer(TcpClient chan)
         {
