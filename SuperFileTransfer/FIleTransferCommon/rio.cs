@@ -61,6 +61,18 @@ namespace FIleTransferCommon
              return BitConverter.ToInt32(byteArray, 0);
         }
 
+        public static void writeLong(this NetworkStream stream, long val)
+        {
+            byte[] byteArray = BitConverter.GetBytes(val);
+             stream.Write(byteArray, 0, byteArray.Length);
+        }
+
+        public static long readLong(this NetworkStream stream)
+        {
+             byte[] byteArray = stream.read(8);
+             return BitConverter.ToInt64(byteArray, 0);
+        }
+
         public static void writeString(this NetworkStream stream, string val)
         {
             byte[] bytes = UTF8Encoding.UTF8.GetBytes(val);

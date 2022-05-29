@@ -29,6 +29,18 @@ namespace SuperFileTransfer
             queueToClient = new ProducerConsumerQueue<TaskToClient>(processTaskToClient);
         }
 
+        private IPAddress getLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip;
+                }
+            }
+        }
+
         void processTaskToClient(TaskToClient Task)
         {
             //invoke in other thread
@@ -41,7 +53,12 @@ namespace SuperFileTransfer
                     ns.WriteByte((byte)CommandToClient.AddComputer);
                     var who = t.whoAdded;
                     ns.writeGuid(who.getGuid());
-                    ns.writeIPAddress(who.getIPAddress());
+                    var ip = who.getIPAddress();
+                    if (ip.Equals(IPAddress.Loopback))
+                    {
+                        ip = getLocalIPAddress();
+                    }
+                    ns.writeIPAddress(ip);
                     ns.writeInt(who.GetPortForFileTransfer());
                     ns.writeBool(who.getHasAccess());
                 }

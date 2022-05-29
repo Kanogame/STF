@@ -8,6 +8,7 @@ namespace FIleTransferCommon
 {
     public enum TransferCommands
     {
-        Ping
+        Ping,
+        Send,
     }
 }
