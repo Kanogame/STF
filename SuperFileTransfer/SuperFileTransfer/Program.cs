@@ -39,6 +39,7 @@ namespace SuperFileTransfer
                     return ip;
                 }
             }
+            return null;
         }
 
         void processTaskToClient(TaskToClient Task)

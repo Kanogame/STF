@@ -4,3 +4,9 @@ C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\FIleTransferCommon\obj\Debug\
 C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.dll
 C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.pdb
 C:\Users\Win10m\source\repos\SFT\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.csproj.AssemblyReference.cache
+C:\Users\OneSmiLe\Desktop\Temp\STF\SuperFileTransfer\FIleTransferCommon\bin\Debug\FIleTransferCommon.dll
+C:\Users\OneSmiLe\Desktop\Temp\STF\SuperFileTransfer\FIleTransferCommon\bin\Debug\FIleTransferCommon.pdb
+C:\Users\OneSmiLe\Desktop\Temp\STF\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.csproj.AssemblyReference.cache
+C:\Users\OneSmiLe\Desktop\Temp\STF\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.csproj.CoreCompileInputs.cache
+C:\Users\OneSmiLe\Desktop\Temp\STF\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.dll
+C:\Users\OneSmiLe\Desktop\Temp\STF\SuperFileTransfer\FIleTransferCommon\obj\Debug\FIleTransferCommon.pdb

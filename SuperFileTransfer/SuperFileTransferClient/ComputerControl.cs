@@ -53,14 +53,31 @@ namespace SuperFileTransferClient
                 {
                     using(Stream source = File.OpenRead(path)) 
                     {
+                        progressBar1.Visible = true;
                         byte[] buffer = new byte[2048];
                         int bytesRead;
-                        while((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
+                        int i = 0;
+                        while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
                         {
+                            i++;
+                        }
+                        int percentage = i / 100;
+                        i = 0;
+                        int BarPers = 0;
+                        while ((bytesRead = source.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            i++;
                             ns.Write(buffer, 0, bytesRead);
+                            if (i >= percentage)
+                            {
+                                BarPers++;
+                                progressBar1.Value = BarPers;
+                            }
                         }
                     }
+                    progressBar1.Value = 0;
                 }
+                progressBar1.Visible = false;
             }
             else
             {
